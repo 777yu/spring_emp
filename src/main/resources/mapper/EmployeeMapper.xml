@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunying.spring_emp.mapper.EmployeeMapper">
+
+
+    <!--    List<Employee> getAllEmp();-->
+    <resultMap id="empAndDept" type="Employee">
+        <id column="emp_id" property="empId"></id>
+        <result column="dept_id" property="department.deptId"></result>
+        <result column="dept_name" property="department.deptName"></result>
+    </resultMap>
+
+    <select id="getAllEmps" resultMap="empAndDept">
+        select * from t_emp e left join t_dept d on e.dept_id = d.dept_id
+    </select>
+
+
+    <select id="getEmpByName" resultMap="empAndDept" parameterType="String">
+        select * from (select * from t_emp where emp_name like concat('%',#{empName},'%')) e left join t_dept d on e.dept_id = d.dept_id
+    </select>
+
+    <insert id="addEmp" parameterType="Employee">
+        insert into t_emp (emp_name,age,gender,dept_id) values (#{empName},#{age},#{gender},#{department.deptId})
+    </insert>
+
+    <delete id="deleteEmp" parameterType="Int">
+        delete from t_emp where emp_id = #{empId}
+    </delete>
+
+    <select id="getEmpById" parameterType="Int" resultMap="empAndDept">
+        select * from (select * from t_emp where emp_id = #{empId}) e left join t_dept d on e.dept_id = d.dept_id
+    </select>
+
+    <update id="updateEmp" parameterType="Employee">
+        update t_emp set emp_name=#{empName},age=#{age},gender=#{gender},dept_id=#{department.deptId} where emp_id=#{empId}
+    </update>
+</mapper>
