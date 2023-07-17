@@ -1,5 +1,6 @@
 package com.yunying.spring_emp.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.yunying.spring_emp.entity.Department;
 import com.yunying.spring_emp.entity.Employee;
 import com.yunying.spring_emp.service.DepartmentService;
@@ -27,10 +28,10 @@ public class EmpController {
      */
     @RequestMapping("/emps")
     public String getEmps(Model model){
-        List<Employee> emps = employeeService.getAllEmps();
-//        emps.forEach( t -> System.out.println(t.getDepartment().getDeptName()));
-        model.addAttribute("emps",emps);
-        return "emp/list";
+//        List<Employee> emps = employeeService.getAllEmps();
+////        emps.forEach( t -> System.out.println(t.getDepartment().getDeptName()));
+//        model.addAttribute("emps",emps);
+        return "redirect:/emps/page/1";
     }
 
     /**
@@ -42,8 +43,8 @@ public class EmpController {
     @RequestMapping("/emps/search")
     public String getEmpByName(@RequestParam("empName") String empName,Model model){
 
-        List<Employee> employee = employeeService.getEmpByName(empName);
-        model.addAttribute("emps",employee);
+        PageInfo<Employee> pageInfo = employeeService.getEmpByName(empName);
+        model.addAttribute("page",pageInfo);
         return "emp/list";
     }
 
@@ -89,6 +90,19 @@ public class EmpController {
         employee.setDepartment(dept);
         int result = employeeService.updateEmp(employee);
         return "redirect:/emps";
+    }
+
+    /**
+     * 分页获取员工
+     * @param pageNum
+     * @param model
+     * @return
+     */
+    @RequestMapping("/emps/page/{pageNum}")
+    public String getEmpPage(@PathVariable("pageNum") Integer pageNum,Model model){
+        PageInfo<Employee> page =  employeeService.getEmpPage(pageNum);
+        model.addAttribute("page",page);
+        return "emp/list";
     }
 
 }

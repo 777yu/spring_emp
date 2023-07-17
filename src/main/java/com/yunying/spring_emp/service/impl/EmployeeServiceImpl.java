@@ -1,5 +1,7 @@
 package com.yunying.spring_emp.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yunying.spring_emp.entity.Employee;
 import com.yunying.spring_emp.mapper.EmployeeMapper;
 import com.yunying.spring_emp.service.EmployeeService;
@@ -20,8 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getEmpByName(String empName) {
-        return employeeMapper.getEmpByName(empName);
+    public PageInfo<Employee> getEmpByName(String empName) {
+        PageHelper.startPage(1,4);
+        List<Employee> emps = employeeMapper.getEmpByName(empName);
+        PageInfo<Employee> pageInfo = new PageInfo<>(emps, 5);
+        return pageInfo;
     }
 
     @Override
@@ -42,5 +47,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public int updateEmp(Employee employee) {
         return employeeMapper.updateEmp(employee);
+    }
+
+    @Override
+    public PageInfo<Employee> getEmpPage(Integer pageNum) {
+        PageHelper.startPage(pageNum,4);
+        List<Employee> allEmps = employeeMapper.getAllEmps();
+        PageInfo<Employee> pageInfo = new PageInfo<>(allEmps, 5);
+        return pageInfo;
     }
 }

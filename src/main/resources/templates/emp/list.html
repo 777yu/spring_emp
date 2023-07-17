@@ -64,9 +64,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="emp:${emps}">
-                        <td th:text="${emp.getEmpId()}"></td>
-<!--                        <td th:text="${status.count}"></td>-->
+                    <tr th:each="emp,status:${page.list}">
+<!--                        <td th:text="${emp.getEmpId()}"></td>-->
+                        <td th:text="${status.count}"></td>
                         <td th:text="${emp.getEmpName()}"></td>
                         <td th:text="${emp.getAge()}"></td>
                         <td th:text="${emp.getGender()=='0'?'女':'男'}"></td>
@@ -76,6 +76,24 @@
                             <a class="btn btn-sm btn-danger" th:href="@{/emps/delete/}+${emp.getEmpId()}">删除</a>
                             <!--										<button th:attr="del_uri=@{/emps/}+${emp.getEmpId()}" class="btn btn-sm btn-danger deleteBtn">删除</button>-->
                         </th>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;vertical-align: center">
+                            <!--                            <span th:if="${page.hasPreviousPage}">-->
+                            <a th:href="@{/emps/page/1}">首页</a>
+                            <!--                                <a th:href="@{'/emps/page/'+${page.prePage}}">上一页</a>-->
+                            <!--                            </span>-->
+                            <span th:each="num : ${page.navigatepageNums}">
+                                <a th:if="${page.pageNum==num}"
+                                   th:href="@{'/emps/page/'+${num}}" th:text="'[  '+${num}+'  ]'" style="color:red;"></a>
+                                <a th:if="${page.pageNum!=num}"
+                                   th:href="@{'/emps/page/'+${num}}" th:text="'  '+${num}+'  '"></a>
+                            </span>
+                            <!--                            <span th:if="${page.hasNextPage}">-->
+                            <!--                                <a th:href="@{'/emps/page/'+${page.nextPage}}">下一页</a>-->
+                            <a th:href="@{'/emps/page/'+${page.pages}}">末页</a>
+                            <!--                            </span>-->
+                        </td>
                     </tr>
                     </tbody>
                 </table>
